@@ -51,6 +51,10 @@ module Display
         }[color]
     end
 
+    def clear_screen
+        system("clear") || system("cls")
+    end
+
     def intro
         <<~HEREDOC
             #{'Welcome to Mastermind!'.bold.underline.italic}
@@ -71,11 +75,11 @@ module Display
             Below is a sample game:
 
             #{'Code:'.bold.underline}
-            #{Board.new(1,[{ guess: %w[red purple purple blue], 
+            #{Board.new(rows: 1,board: [{ guess: %w[red purple purple blue], 
                                                 keys: %w[empty empty empty empty] }])}
     
             #{'Gameplay:'.bold.underline}
-            #{Board.new(5, [{ guess: %w[red red blue blue], 
+            #{Board.new(rows: 5, board: [{guess: %w[red red blue blue], 
                                                 keys: %w[red used used red] }, 
                                             { guess: %w[red red green green], 
                                                 keys: %w[red used used used] }, 

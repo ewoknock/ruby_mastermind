@@ -1,30 +1,30 @@
 class String
     def red
-        "\e[31m#{self}\e[0m"
+        "\e[91m#{self}\e[0m"
     end
 
     def yellow
-        "\e[33m#{self}\e[0m"
+        "\e[93m#{self}\e[0m"
     end
 
     def green
-        "\e[32m#{self}\e[0m"
+        "\e[92m#{self}\e[0m"
     end
 
     def cyan
-        "\e[36m#{self}\e[0m"
+        "\e[96m#{self}\e[0m"
     end
 
     def blue
-        "\e[34m#{self}\e[0m"
+        "\e[94m#{self}\e[0m"
     end
 
     def purple
-        "\e[35m#{self}\e[0m"
+        "\e[95m#{self}\e[0m"
     end
 
     def white
-        "\e[37m#{self}\e[0m"
+        "\e[97m#{self}\e[0m"
     end
 
     def bold
