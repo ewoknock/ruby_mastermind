@@ -5,7 +5,11 @@ module Input
         {
             'mode' => "Please select your desired game mode (1: BREAKER, 2: SETTER): ",
             'max_guesses' => "How many guesses would you like? (Maximum of 20 guesses): ",
-            'guess' => "Please enter your guesses with a space between them (i.e. 'r g b p' for 'red green blue purple'): "
+            'guess' => "Please enter your guesses with a space between them (i.e. 'r g b p' for 'red green blue purple'): ",
+            'win' => "Congratulations! You've successfully cracked the code!",
+            'lose' => "Sorry, you lost :(",
+            'again' => "Would you like to play again? (y/n): ",
+            'end' => "Thanks for playing!"
         }[msg]
     end
 
@@ -23,7 +27,6 @@ module Input
     def get_guess(message)
         print message
         guess = gets.chomp.split(' ')
-        #binding.pry
         until (guess - VALID_GUESSES).empty? && guess.length == 4
             unless (guess - VALID_GUESSES).empty?
                 puts guess.join(' ') + " is not a valid guess."
@@ -37,7 +40,6 @@ module Input
     end
 
     def format_color(guess)
-        binding.pry
         guess.each_with_index do |color, i| 
             guess[i] = {
                 'r' => 'red',
@@ -49,6 +51,17 @@ module Input
               }[color.downcase]
         end
         guess
+    end
+
+    def yes_no(message)
+        print message
+        response = gets.chomp
+        until %w[y Y n N].include? response
+            puts "Please enter 'y' or 'n'."
+            print message
+            response = gets.chomp
+        end
+        response.downcase
     end
 
 end

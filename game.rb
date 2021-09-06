@@ -5,7 +5,7 @@ class Game
     include Display
     include Input
     attr_reader :board, :game_mode, :max_guesses, :setter, :breaker, :code
-    attr_accessor :turn
+    attr_accessor :turn, :game_end
 
     def initialize
         @board = Board.new()
@@ -16,7 +16,18 @@ class Game
         setup_game
         @board = Board.new(rows: @max_guesses, code: @code)
         @turn = -1
-        next_turn
+        loop do 
+            next_turn
+            clear_screen
+            break if game_over?#@turn == @max_guesses - 1 || board.answer_found?(@turn - 1)
+        end
+        puts @board
+        puts messages(@game_end)
+        if continue?
+            play_game
+        else
+            puts messages("end")
+        end
     end
 
     private 
@@ -36,7 +47,23 @@ class Game
         puts @board
         guess = breaker.make_guess()
         board.process_guess(turn, guess)
-        puts @board
     end
+
+    def game_over?
+        if board.answer_found?(@turn)
+            @game_end = "win"
+            return true
+        end
+        if @turn == @max_guesses - 1 && !board.answer_found?(@turn)
+            @game_end = "lose"
+            return true
+        end
+        false
+    end
+
+    def continue?
+        yes_no(messages('again')) == 'y'
+    end
+
 
 end

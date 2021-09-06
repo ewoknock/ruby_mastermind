@@ -25,7 +25,34 @@ class Board
 
     def process_guess(turn, guess)
         board[turn][:guess] = guess
-        binding.pry
+        update_key(turn, guess)
     end
 
+    def update_key(turn, guess)
+        keys = Array.new(4, "used")
+        code_count = Hash.new(0)
+        code.each {|key| code_count[key] += 1}
+        guess_count = Hash.new(0)
+        guess.each {|guess| guess_count[guess] += 1}
+        binding.pry
+        code.each_with_index do |color, index|
+            if(code_count[guess[index]] > 0)
+                if(guess[index] == code[index])
+                    keys[index] = "red"
+                    code_count[guess[index]] -= 1
+                elsif code.include?(guess[index])
+                    unless guess_count[guess[index]] > code_count[guess[index]]
+                        keys[index] = "white"
+                        code_count[guess[index]] -= 1
+                    end
+                end
+            end
+            guess_count[guess[index]] -= 1
+        end
+        board[turn][:keys] = keys
+    end
+
+    def answer_found?(turn)
+        board[turn][:keys].all? {|word| word == "red"}
+    end
 end
