@@ -16,6 +16,10 @@ class Board
         [{guess: guess, keys: keys}]
     end
 
+    def get_row(row)
+        board[row]
+    end
+
     def to_s
         rows = board
                 .map{|row| display_row(row[:guess], row[:keys])}
@@ -34,7 +38,7 @@ class Board
         code.each {|key| code_count[key] += 1}
         guess_count = Hash.new(0)
         guess.each {|guess| guess_count[guess] += 1}
-        binding.pry
+        #binding.pry
         code.each_with_index do |color, index|
             if(code_count[guess[index]] > 0)
                 if(guess[index] == code[index])

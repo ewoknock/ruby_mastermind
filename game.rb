@@ -34,7 +34,6 @@ class Game
 
     def setup_game
         @game_mode = get_int_between(messages("mode"), 1, 2)
-        puts @game_mode 
         @max_guesses = get_int_between(messages("max_guesses"), 1, 20)
         @breaker = @game_mode == 1 ? Human.new : Computer.new
         @setter = @game_mode == 2 ? Human.new : Computer.new
@@ -45,16 +44,16 @@ class Game
     def next_turn
         @turn += 1
         puts @board
-        guess = breaker.make_guess()
-        board.process_guess(turn, guess)
+        guess = breaker.make_guess(@board, @turn)
+        @board.process_guess(@turn, guess)
     end
 
     def game_over?
-        if board.answer_found?(@turn)
+        if @board.answer_found?(@turn)
             @game_end = "win"
             return true
         end
-        if @turn == @max_guesses - 1 && !board.answer_found?(@turn)
+        if @turn == @max_guesses - 1 && !@board.answer_found?(@turn)
             @game_end = "lose"
             return true
         end

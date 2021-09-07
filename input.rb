@@ -6,6 +6,7 @@ module Input
             'mode' => "Please select your desired game mode (1: BREAKER, 2: SETTER): ",
             'max_guesses' => "How many guesses would you like? (Maximum of 20 guesses): ",
             'guess' => "Please enter your guesses with a space between them (i.e. 'r g b p' for 'red green blue purple'): ",
+            'code' => "Please enter the code (e.g. 'r g b p' for 'red green blue purple'): ",
             'win' => "Congratulations! You've successfully cracked the code!",
             'lose' => "Sorry, you lost :(",
             'again' => "Would you like to play again? (y/n): ",
@@ -37,6 +38,21 @@ module Input
             guess = gets.chomp.split(' ')
         end 
         format_color(guess)
+    end
+
+    def get_code(message)
+        print message
+        code = gets.chomp.split(' ')
+        until (code - VALID_GUESSES).empty? && code.length == 4
+            unless (code - VALID_GUESSES).empty?
+                puts code.join(' ') + " is not a valid code."
+            else
+                puts "please enter 4 colors in one line"
+            end
+            print message
+            code = gets.chomp.split(' ')
+        end 
+        format_color(code)
     end
 
     def format_color(guess)
