@@ -4,6 +4,8 @@ class Computer
 
     def initialize
         @colors = %w[red yellow green cyan blue purple]
+        @wrong_guesses = {"red" => false, "yellow" => false, "green" => false, 
+                            "cyan" => false, "blue" => false, "purple" => false}
         @guess = %w[red red yellow yellow]
         @guess_index = 2
     end
@@ -15,14 +17,30 @@ class Computer
     end
 
     def make_guess(board, turn)
+
         unless turn == 0
-            key = board.get_row(turn - 1)[:keys]
-            saved = nil
+            keys = board.get_row(turn - 1)[:keys].clone
 
             color_count = 0
 
+            keys.each_with_index do |key, index|
+                if key == "used"
+                    @wrong_guesses[@guess[index]] = true
+                else
+                    @wrong_guesses[@guess[index]] = false
+                end
+            end
+
+            #binding.pry
+            @colors.each do |color| 
+                if @wrong_guesses[color]
+                    @colors.delete(color) 
+                    @guess_index -= 1
+                end
+            end
+
             new_guess = @guess.clone
-            key.each_with_index do |key, index|
+            keys.each_with_index do |key, index|
                 if key == "white"
                     #binding.pry
 
@@ -30,9 +48,10 @@ class Computer
                     next_index = (index + 1) % 4
                     check = 0
                     while not_inserted && check < 4
-                        if @guess[next_index] == "used" || new_guess[next_index] != @guess[index]
+                        if keys[next_index] != "red" && new_guess[next_index] != @guess[index]
                             unless @guess[next_index] == @guess[index]
                                 new_guess[next_index] = @guess[index]
+                                keys[index] = "used"
                                 not_inserted = false
                             end
                         end
@@ -42,18 +61,15 @@ class Computer
                 end
             end
 
-            @guess = new_guess.clone
 
 
-            key.each_with_index do |key, index|
+            keys.each_with_index do |key, index|
                 if key == "used"
                     #binding.pry
-                    if @colors.include?(@guess[index])
-                        @colors.delete(@guess[index])
-                        @guess_index -= 1
+                    if new_guess[index] == guess[index]
+                        new_guess[index] = @colors[@guess_index]
+                        color_count += 1
                     end
-                    @guess[index] = @colors[@guess_index]
-                    color_count += 1
                     if color_count == 2 && turn <= 3
                         @guess_index = (@guess_index + 1) % @colors.length
 
@@ -61,6 +77,8 @@ class Computer
                     end
                 end
             end
+            #binding.pry
+            @guess = new_guess.clone
 
             @guess_index = (@guess_index + 1) % @colors.length
 =begin

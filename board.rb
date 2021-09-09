@@ -37,9 +37,9 @@ class Board
         code_count = Hash.new(0)
         code.each {|key| code_count[key] += 1}
         guess_count = Hash.new(0)
-        guess.each {|guess| guess_count[guess] += 1}
+        guess.each {|g| guess_count[g] += 1}
         #binding.pry
-        code.each_with_index do |color, index|
+        code.each_with_index do |_color, index|
             if(code_count[guess[index]] > 0)
                 if(guess[index] == code[index])
                     keys[index] = "red"
